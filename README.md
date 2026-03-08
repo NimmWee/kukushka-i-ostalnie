@@ -1,78 +1,133 @@
-# Kukushka и остальные
+# 🐦 Kukushka и остальные
 
-Небольшой статический веб-проект для визуализации методов оптимизации:
+<div align="center">
 
-- `GA + Tabu`
-- `Simulated Annealing`
-- `Scatter Search`
+### Интерактивная визуализация метаэвристик и популяционных методов оптимизации
 
-Приложение работает полностью на клиенте и не требует сборки, бэкенда или установки зависимостей.
+<p>
+  <img src="https://img.shields.io/badge/HTML-5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML" />
+  <img src="https://img.shields.io/badge/CSS-3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS" />
+  <img src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111" alt="JavaScript" />
+</p>
 
-## Файлы проекта
+<p>
+  <img src="https://img.shields.io/badge/Тип-Статический%20веб--проект-5B5BD6?style=flat-square" alt="Static project" />
+  <img src="https://img.shields.io/badge/Сборка-Не%20нужна-1F883D?style=flat-square" alt="No build" />
+  <img src="https://img.shields.io/badge/Запуск-За%2010%20секунд-orange?style=flat-square" alt="Quick start" />
+</p>
 
-- `index.html` — основная страница
-- `styles.css` — стили интерфейса
-- `app.js` — логика визуализации и алгоритмов
-- `genetik.jpg`, `otshig.jpg`, `rasseivanie.jpg`, `kukushka.jpg` — изображения и схемы
+</div>
 
-## Быстрый запуск
+> Проект показывает, как работают `GA + Tabu`, `Simulated Annealing` и `Scatter Search` на одной карте целевой функции — с анимацией, графиком сходимости, пошаговым режимом и журналом выполнения.
 
-### Вариант 1 — просто открыть в браузере
+---
 
-1. Скачайте или клонируйте репозиторий.
-2. Откройте файл `index.html` в любом современном браузере.
+## ✨ Что здесь есть
 
-Подойдут:
+- интерактивный выбор алгоритма и целевой функции
+- визуальная карта поиска в 2D
+- график сходимости по итерациям
+- пошаговый режим выполнения алгоритма
+- лог текущих фаз и изменений состояния
+- наглядная демонстрация поведения разных метаэвристик
 
-- Google Chrome
-- Microsoft Edge
-- Mozilla Firefox
+## 🚀 Запуск
 
-## Запуск через локальный сервер
+Проект полностью статический: без бэкенда, без сборки, без установки зависимостей.
 
-Если удобнее запускать проект как сайт, поднимите простой статический сервер в папке проекта.
+### Вариант 1 — открыть сразу
 
-### Через Python
+1. Склонируйте репозиторий или скачайте архив.
+2. Откройте `index.html` в браузере.
+
+### Вариант 2 — поднять локальный сервер
+
+#### Через Python
 
 ```bash
 python -m http.server 8000
 ```
 
-После этого откройте:
+Откройте:
 
 ```text
 http://localhost:8000
 ```
 
-### Через Node.js
-
-Если установлен Node.js:
+#### Через Node.js
 
 ```bash
 npx serve .
 ```
 
-После запуска откройте адрес, который покажет команда в терминале.
+После запуска откройте адрес, который покажет терминал.
 
-## Как пользоваться
+## 🕹️ Как пользоваться
 
-1. Откройте страницу проекта.
-2. Выберите алгоритм в списке:
+1. Выберите алгоритм:
    - `GA + Tabu`
    - `Simulated Annealing`
    - `Scatter Search`
-3. Выберите целевую функцию.
-4. При необходимости настройте параметры.
-5. Нажмите:
-   - `Сброс` — инициализация
+2. Выберите целевую функцию:
+   - `Sphere`
+   - `Rastrigin`
+   - `Ackley`
+3. Настройте параметры запуска.
+4. Нажмите:
+   - `Сброс` — подготовка алгоритма
    - `Старт` — запуск анимации
-   - `Пауза` — пауза
+   - `Пауза` — остановка
    - `Шаг` — пошаговое выполнение
 
-## Требования
+## 🧠 Алгоритмы внутри
 
-- современный браузер с поддержкой JavaScript
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <strong>GA + Tabu</strong><br />
+      <a href="./genetik.jpg">
+        <img src="./genetik.jpg" alt="GA + Tabu" width="100%" />
+      </a>
+    </td>
+    <td align="center" width="33%">
+      <strong>Simulated Annealing</strong><br />
+      <a href="./otshig.jpg">
+        <img src="./otshig.jpg" alt="Simulated Annealing" width="100%" />
+      </a>
+    </td>
+    <td align="center" width="33%">
+      <strong>Scatter Search</strong><br />
+      <a href="./rasseivanie.jpg">
+        <img src="./rasseivanie.jpg" alt="Scatter Search" width="100%" />
+      </a>
+    </td>
+  </tr>
+</table>
 
-## Репозиторий
+## 📁 Структура проекта
+
+```text
+.
+├── index.html        # интерфейс приложения
+├── styles.css        # оформление и layout
+├── app.js            # логика визуализации и алгоритмов
+├── genetik.jpg       # схема Genetic + Tabu
+├── otshig.jpg        # схема Simulated Annealing
+├── rasseivanie.jpg   # схема Scatter Search
+└── kukushka.jpg      # дополнительное изображение проекта
+```
+
+## 💡 Почему проект удобен для демонстрации
+
+- подходит для учебных работ и презентаций
+- помогает сравнивать поведение алгоритмов визуально
+- показывает не только результат, но и процесс поиска
+- запускается буквально в один файл
+
+## 🖥️ Требования
+
+- любой современный браузер с поддержкой JavaScript
+
+## 🔗 Репозиторий
 
 GitHub: `https://github.com/NimmWee/kukushka-i-ostalnie.git`
