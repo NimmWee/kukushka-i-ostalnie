@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metaheuristics Lab - GA + Tabu, Annealing, Scatter Search</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-noise"></div>
+
+  <header class="hero">
+    <div class="hero-text">
+      <h1>Гибридные и популяционные методы оптимизации</h1>
+      <p>
+        Реализация по блок-схемам: <strong>Genetic + Tabu</strong>, <strong>Simulated Annealing</strong> и
+        <strong>Scatter Search</strong> на одной карте целевой функции.
+      </p>
+      <div class="hero-note">
+        <strong>Идея:</strong> для режима <span>GA + Tabu</span> генетический алгоритм сначала выделяет
+        перспективные области, после чего из них запускается мультистартовый Табу-поиск.
+      </div>
+    </div>
+    <div class="hero-links">
+      <a class="source-link" href="../genetik/genetik.jpg" target="_blank" rel="noopener">Схема Genetik</a>
+      <a class="source-link" href="../otshig/otshig.jpg" target="_blank" rel="noopener">Схема Otshig</a>
+      <a class="source-link" href="../rasseivanie/rasseivanie.jpg" target="_blank" rel="noopener">Схема Rasseivanie</a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel quick-guide">
+      <h2>Как читать экран</h2>
+      <div class="quick-grid">
+        <article>
+          <h3>Поле поиска</h3>
+          <p>Синие точки - активные решения алгоритма, желтые - кандидаты текущего шага, оранжевая - лучшее найденное.</p>
+        </article>
+        <article>
+          <h3>Панель прогресса</h3>
+          <p>Показывает долю выполненных итераций и относительное улучшение качества решения.</p>
+        </article>
+        <article>
+          <h3>Фазовый журнал</h3>
+          <p>Отображает, какой блок схемы выполняется сейчас, и ключевые численные события.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel controls">
+      <h2>Параметры запуска</h2>
+      <div class="control-grid">
+        <label>
+          <span class="field-title">Алгоритм</span>
+          <select id="algorithm">
+            <option value="ga_tabu">GA + Tabu (по схеме genetik)</option>
+            <option value="annealing">Simulated Annealing (otshig)</option>
+            <option value="scatter">Scatter Search (rasseivanie)</option>
+          </select>
+          <small id="algorithmHint">Выберите метод, затем нажмите "Сброс" для инициализации.</small>
+        </label>
+        <label>
+          <span class="field-title">Функция оптимизации</span>
+          <select id="objective">
+            <option value="sphere">Sphere (минимум)</option>
+            <option value="rastrigin">Rastrigin (минимум)</option>
+            <option value="ackley">Ackley (минимум)</option>
+          </select>
+          <small>Поверхность, на которой ищется минимум.</small>
+        </label>
+
+        <label>
+          <span id="nestsTitle" class="field-title">Размер популяции N</span>
+          <input id="nests" type="number" min="10" max="200" step="1" value="60" />
+          <small id="nestsHint">Число стартовых решений в популяции.</small>
+        </label>
+        <label>
+          <span id="paTitle" class="field-title">Вероятность мутации p_m</span>
+          <input id="pa" type="number" min="0.01" max="0.6" step="0.01" value="0.15" />
+          <small id="paHint">Используется в ГА и в адаптации для остальных режимов.</small>
+        </label>
+        <label>
+          <span id="maxIterTitle" class="field-title">Максимум итераций</span>
+          <input id="maxIter" type="number" min="20" max="3000" step="1" value="120" />
+          <small id="maxIterHint">Лимит цикла по блок-схеме.</small>
+        </label>
+        <label>
+          <span id="alphaTitle" class="field-title">Параметр alpha</span>
+          <input id="alpha" type="number" min="0.01" max="1.2" step="0.01" value="0.85" />
+          <small id="alphaHint">Зависит от выбранного алгоритма (кроссовер, охлаждение, мутация).</small>
+        </label>
+        <label>
+          <span id="betaTitle" class="field-title">Параметр beta</span>
+          <input id="beta" type="number" min="1" max="1000" step="1" value="120" />
+          <small id="betaHint">Для GA+Tabu: итерации Табу на один запуск; для других режимов - локальный шаг.</small>
+        </label>
+      </div>
+
+      <div class="speed-wrap">
+        <label>
+          <span class="field-title">Скорость анимации</span>
+          <input id="speed" type="range" min="80" max="1200" step="20" value="340" />
+        </label>
+        <output id="speedVal">0.34 с/шаг</output>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn">Старт</button>
+        <button id="pauseBtn" class="ghost">Пауза</button>
+        <button id="stepBtn" class="ghost">Шаг</button>
+        <button id="resetBtn" class="danger">Сброс</button>
+      </div>
+
+      <p id="statusLine" class="status">Статус: ожидание запуска</p>
+      <p id="stopReason" class="sub-status">Причина остановки: пока нет</p>
+    </section>
+
+    <section class="panel dashboard">
+      <h2>Прогресс оптимизации</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="label">Итерация</span>
+          <strong id="iterVal">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="label">Лучшее значение f(x)</span>
+          <strong id="bestVal">-</strong>
+        </div>
+        <div class="stat-card">
+          <span class="label">Лучшая точка X_best</span>
+          <strong id="bestPos">-</strong>
+        </div>
+        <div class="stat-card">
+          <span class="label">Текущая фаза</span>
+          <strong id="phaseVal">-</strong>
+        </div>
+      </div>
+
+      <div class="meters">
+        <div class="meter-block">
+          <div class="meter-head">
+            <span>Итерационный прогресс</span>
+            <strong id="iterProgressText">0 / 0</strong>
+          </div>
+          <div class="meter">
+            <div id="iterBar" class="fill iter-fill"></div>
+          </div>
+        </div>
+        <div class="meter-block">
+          <div class="meter-head">
+            <span>Качество решения</span>
+            <strong id="qualityText">-</strong>
+          </div>
+          <div class="meter">
+            <div id="qualityBar" class="fill quality-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="explain">
+        <h3 id="plainTitle">Ожидание инициализации</h3>
+        <p id="plainText">Нажмите "Сброс", затем "Старт" или "Шаг", чтобы пройти блоки алгоритма.</p>
+      </div>
+    </section>
+
+    <section class="panel viz">
+      <h2>Карта поиска (2D)</h2>
+      <canvas id="searchCanvas" width="660" height="420"></canvas>
+      <p class="legend">
+        <span><i class="dot nest"></i> активные решения</span>
+        <span><i class="dot candidate"></i> кандидаты шага</span>
+        <span><i class="dot best"></i> X_best</span>
+      </p>
+      <p id="hoverInfo" class="hover-info">Курсор: наведите мышь на поле</p>
+    </section>
+
+    <section class="panel chart">
+      <h2>График сходимости</h2>
+      <canvas id="chartCanvas" width="660" height="220"></canvas>
+    </section>
+
+    <section class="panel flow">
+      <h2>Этапы текущего алгоритма</h2>
+      <ol id="flowList"></ol>
+    </section>
+
+    <section class="panel log">
+      <h2>Журнал шагов</h2>
+      <div id="logBox"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
