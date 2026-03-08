@@ -1,3 +1,6 @@
+const fs = require("node:fs");
+const path = require("node:path");
+
 const { createHarness } = require("../tests/utils/headless-app-harness");
 
 const scenarios = [
@@ -60,6 +63,12 @@ function formatNumber(value) {
   return value.toFixed(6);
 }
 
+function csvEscape(value) {
+  const text = String(value ?? "");
+  if (text.includes(",") || text.includes("\"") || text.includes("\n")) return `"${text.replace(/"/g, "\"\"")}"`;
+  return text;
+}
+
 function runOne(seed, params) {
   const harness = createHarness({ seed });
   const initial = harness.configure(params);
@@ -98,6 +107,92 @@ function verifyScenario(scenario) {
   };
 }
 
+function runAllScenarios() {
+  return scenarios.map(verifyScenario);
+}
+
+function flattenResults(results) {
+  return results.flatMap((scenario) =>
+    scenario.runs.map((run) => ({
+      scenario: scenario.name,
+      algorithmKey: scenario.params.algorithmKey,
+      objectiveKey: scenario.params.objectiveKey,
+      seed: run.seed,
+      initialBest: run.initialBest,
+      finalBest: run.finalBest,
+      improvementPercent: run.improvement,
+      steps: run.steps,
+      stopReason: run.stopReason
+    }))
+  );
+}
+
+function buildJsonReport(results) {
+  return {
+    generatedAt: new Date().toISOString(),
+    notes: [
+      "Tests use the real browser implementation from app.js via a headless DOM/canvas harness.",
+      "Results are deterministic because each run uses a fixed random seed.",
+      "This validates continuous optimization behavior on Sphere, Ackley, and Rastrigin, not Berlin52/TSP."
+    ],
+    results
+  };
+}
+
+function buildCsvReport(results) {
+  const rows = flattenResults(results);
+  const header = [
+    "scenario",
+    "algorithmKey",
+    "objectiveKey",
+    "seed",
+    "initialBest",
+    "finalBest",
+    "improvementPercent",
+    "steps",
+    "stopReason"
+  ];
+
+  return [
+    header.join(","),
+    ...rows.map((row) =>
+      [
+        row.scenario,
+        row.algorithmKey,
+        row.objectiveKey,
+        row.seed,
+        row.initialBest,
+        row.finalBest,
+        row.improvementPercent,
+        row.steps,
+        row.stopReason
+      ].map(csvEscape).join(",")
+    )
+  ].join("\n");
+}
+
+function writeReport(filePath, content) {
+  const absolutePath = path.resolve(filePath);
+  fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
+  fs.writeFileSync(absolutePath, content, "utf8");
+  return absolutePath;
+}
+
+function parseArgs(argv) {
+  const options = {
+    json: null,
+    csv: null
+  };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const current = argv[index];
+    if (current === "--json") options.json = argv[index + 1] || null;
+    if (current === "--csv") options.csv = argv[index + 1] || null;
+  }
+
+  return options;
+}
+
 function printScenarioReport(result) {
   console.log(result.name);
   console.log(`  finished:          ${result.summary.finished ? "yes" : "no"}`);
@@ -116,17 +211,40 @@ function printScenarioReport(result) {
 }
 
 function main() {
+  const options = parseArgs(process.argv.slice(2));
+
   console.log("ALGORITHM VERIFICATION REPORT");
   console.log("=============================");
   console.log("");
 
-  const results = scenarios.map(verifyScenario);
+  const results = runAllScenarios();
   results.forEach(printScenarioReport);
+
+  if (options.json) {
+    const jsonPath = writeReport(options.json, `${JSON.stringify(buildJsonReport(results), null, 2)}\n`);
+    console.log(`JSON report: ${jsonPath}`);
+  }
+  if (options.csv) {
+    const csvPath = writeReport(options.csv, `${buildCsvReport(results)}\n`);
+    console.log(`CSV report:  ${csvPath}`);
+  }
+  if (options.json || options.csv) console.log("");
 
   console.log("Notes:");
   console.log("- Tests use the real browser implementation from app.js via a headless DOM/canvas harness.");
   console.log("- Results are deterministic because each run uses a fixed random seed.");
   console.log("- Sphere is the strongest correctness sanity-check because its global optimum is known exactly: f(0,0)=0.");
+  console.log("- This checks continuous optimization only; it does not validate Berlin52/TSP.");
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = {
+  scenarios,
+  runOne,
+  verifyScenario,
+  runAllScenarios,
+  flattenResults,
+  buildJsonReport,
+  buildCsvReport
+};

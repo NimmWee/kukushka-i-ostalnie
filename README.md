@@ -152,6 +152,12 @@ node scripts/run-algorithm-tests.js
 node scripts/verify-algorithms.js
 ```
 
+Экспорт в файлы:
+
+```bash
+node scripts/verify-algorithms.js --json reports/algorithm-verification.json --csv reports/algorithm-verification.csv
+```
+
 Отчёт показывает:
 
 - результат по нескольким `seed`
@@ -159,6 +165,8 @@ node scripts/verify-algorithms.js
 - процент улучшения
 - число шагов
 - сравнение для `Sphere`, `Ackley`, `Rastrigin`
+
+Короткая готовая записка для преподавателя: `ALGORITHM_VERIFICATION_SUMMARY.md`
 
 ## 🔗 Репозиторий
 

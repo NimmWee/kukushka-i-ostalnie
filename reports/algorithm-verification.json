@@ -1,0 +1,631 @@
+{
+  "generatedAt": "2026-03-08T17:18:05.873Z",
+  "notes": [
+    "Tests use the real browser implementation from app.js via a headless DOM/canvas harness.",
+    "Results are deterministic because each run uses a fixed random seed.",
+    "This validates continuous optimization behavior on Sphere, Ackley, and Rastrigin, not Berlin52/TSP."
+  ],
+  "results": [
+    {
+      "name": "GA+Tabu / Sphere",
+      "params": {
+        "algorithmKey": "ga_tabu",
+        "objectiveKey": "sphere",
+        "nests": 60,
+        "pa": 0.15,
+        "maxIter": 100,
+        "alpha": 0.85,
+        "beta": 100
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.009286521688612995,
+          "finalBest": 8.307480511636997e-8,
+          "improvement": 99.99910542603676,
+          "steps": 80,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 19,
+          "initialBest": 0.2056646993661955,
+          "finalBest": 6.80560208718076e-7,
+          "improvement": 99.99966909235721,
+          "steps": 26,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.010530154455274618,
+          "finalBest": 1.5878232174027267e-7,
+          "improvement": 99.99849211782777,
+          "steps": 20,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 0.28306290932921474,
+          "finalBest": 7.733904129541579e-7,
+          "improvement": 99.99972677790433,
+          "steps": 16,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 1.9141985492566684,
+          "finalBest": 1.2475666416510373e-8,
+          "improvement": 99.9999993482564,
+          "steps": 24,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 1.2475666416510373e-8,
+        "worstFinal": 7.733904129541579e-7,
+        "medianFinal": 1.5878232174027267e-7,
+        "medianImprovement": 99.99966909235721,
+        "avgSteps": 33.2
+      }
+    },
+    {
+      "name": "GA+Tabu / Ackley",
+      "params": {
+        "algorithmKey": "ga_tabu",
+        "objectiveKey": "ackley",
+        "nests": 60,
+        "pa": 0.15,
+        "maxIter": 100,
+        "alpha": 0.85,
+        "beta": 100
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.5038143496657703,
+          "finalBest": 0.002584947807257265,
+          "improvement": 99.48692453699024,
+          "steps": 428,
+          "stopReason": "Причина остановки: GA+Tabu: gen=37, starts=7, tabuIters=336"
+        },
+        {
+          "seed": 19,
+          "initialBest": 2.9699512478627597,
+          "finalBest": 0.00045795871268694555,
+          "improvement": 99.98458026161148,
+          "steps": 108,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.5520461442172611,
+          "finalBest": 0.0007812105363349531,
+          "improvement": 99.85848818173658,
+          "steps": 26,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 3.233292380579737,
+          "finalBest": 0.00032175612174611956,
+          "improvement": 99.99004865369805,
+          "steps": 26,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 4.481108242147908,
+          "finalBest": 0.0003719275341858008,
+          "improvement": 99.99170009930384,
+          "steps": 64,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.00032175612174611956,
+        "worstFinal": 0.002584947807257265,
+        "medianFinal": 0.00045795871268694555,
+        "medianImprovement": 99.98458026161148,
+        "avgSteps": 130.4
+      }
+    },
+    {
+      "name": "GA+Tabu / Rastrigin",
+      "params": {
+        "algorithmKey": "ga_tabu",
+        "objectiveKey": "rastrigin",
+        "nests": 60,
+        "pa": 0.15,
+        "maxIter": 100,
+        "alpha": 0.85,
+        "beta": 100
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 1.8023485583893564,
+          "finalBest": 0.0005597976296076723,
+          "improvement": 99.96894065651163,
+          "steps": 22,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 19,
+          "initialBest": 3.9860946255424548,
+          "finalBest": 0.00026476091173499583,
+          "improvement": 99.99335788693931,
+          "steps": 56,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 2.0530203122243194,
+          "finalBest": 0.000244020528022304,
+          "improvement": 99.98811407142105,
+          "steps": 342,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 4.078986274526628,
+          "finalBest": 0.0009351450244690085,
+          "improvement": 99.97707408258985,
+          "steps": 40,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 6.90318436570989,
+          "finalBest": 0.0007582135137234047,
+          "improvement": 99.9890164672772,
+          "steps": 60,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.000244020528022304,
+        "worstFinal": 0.0009351450244690085,
+        "medianFinal": 0.0005597976296076723,
+        "medianImprovement": 99.98811407142105,
+        "avgSteps": 104
+      }
+    },
+    {
+      "name": "Annealing / Sphere",
+      "params": {
+        "algorithmKey": "annealing",
+        "objectiveKey": "sphere",
+        "nests": 40,
+        "pa": 0.001,
+        "maxIter": 1400,
+        "alpha": 0.96,
+        "beta": 0.45
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.009286521688612995,
+          "finalBest": 0.0017243929980174525,
+          "improvement": 81.43122844227156,
+          "steps": 886,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 19,
+          "initialBest": 0.2056646993661955,
+          "finalBest": 0.00020723089326830043,
+          "improvement": 99.89923847217975,
+          "steps": 896,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.010530154455274618,
+          "finalBest": 0.003365984823131936,
+          "improvement": 68.0348010332755,
+          "steps": 841,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 29,
+          "initialBest": 0.28306290932921474,
+          "finalBest": 0.00107068855947256,
+          "improvement": 99.62174890309372,
+          "steps": 911,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 31,
+          "initialBest": 1.9141985492566684,
+          "finalBest": 0.0027194733827032337,
+          "improvement": 99.8579314886766,
+          "steps": 716,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.00020723089326830043,
+        "worstFinal": 0.003365984823131936,
+        "medianFinal": 0.0017243929980174525,
+        "medianImprovement": 99.62174890309372,
+        "avgSteps": 850
+      }
+    },
+    {
+      "name": "Annealing / Ackley",
+      "params": {
+        "algorithmKey": "annealing",
+        "objectiveKey": "ackley",
+        "nests": 40,
+        "pa": 0.001,
+        "maxIter": 1600,
+        "alpha": 0.96,
+        "beta": 0.45
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.5038143496657703,
+          "finalBest": 0.16272761376801625,
+          "improvement": 67.70087754031431,
+          "steps": 761,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 19,
+          "initialBest": 2.9699512478627597,
+          "finalBest": 0.09678280498489045,
+          "improvement": 96.74126620581609,
+          "steps": 986,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.5520461442172611,
+          "finalBest": 0.291428129430475,
+          "improvement": 47.20946201993909,
+          "steps": 751,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 29,
+          "initialBest": 3.557446215896359,
+          "finalBest": 0.29394518463183417,
+          "improvement": 91.73718541918223,
+          "steps": 986,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 31,
+          "initialBest": 4.481108242147908,
+          "finalBest": 0.07072386258496266,
+          "improvement": 98.42173277762505,
+          "steps": 1831,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.07072386258496266,
+        "worstFinal": 0.29394518463183417,
+        "medianFinal": 0.16272761376801625,
+        "medianImprovement": 91.73718541918223,
+        "avgSteps": 1063
+      }
+    },
+    {
+      "name": "Annealing / Rastrigin",
+      "params": {
+        "algorithmKey": "annealing",
+        "objectiveKey": "rastrigin",
+        "nests": 40,
+        "pa": 0.001,
+        "maxIter": 1800,
+        "alpha": 0.965,
+        "beta": 0.4
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 1.8023485583893564,
+          "finalBest": 0.21392961118168685,
+          "improvement": 88.13050837553519,
+          "steps": 916,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 19,
+          "initialBest": 3.9860946255424548,
+          "finalBest": 3.9860946255424548,
+          "improvement": 0,
+          "steps": 916,
+          "stopReason": "Причина остановки: температура <= Tmin (0.001000)"
+        },
+        {
+          "seed": 23,
+          "initialBest": 2.0530203122243194,
+          "finalBest": 1.0331237983877468,
+          "improvement": 49.677857922972926,
+          "steps": 9001,
+          "stopReason": "Причина остановки: достигнут лимит t=1800"
+        },
+        {
+          "seed": 29,
+          "initialBest": 4.078986274526628,
+          "finalBest": 1.0419628418340317,
+          "improvement": 74.45534817459142,
+          "steps": 9001,
+          "stopReason": "Причина остановки: достигнут лимит t=1800"
+        },
+        {
+          "seed": 31,
+          "initialBest": 6.90318436570989,
+          "finalBest": 0.08767075905161192,
+          "improvement": 98.72999539912192,
+          "steps": 9001,
+          "stopReason": "Причина остановки: достигнут лимит t=1800"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.08767075905161192,
+        "worstFinal": 3.9860946255424548,
+        "medianFinal": 1.0331237983877468,
+        "medianImprovement": 74.45534817459142,
+        "avgSteps": 5767
+      }
+    },
+    {
+      "name": "Scatter / Sphere",
+      "params": {
+        "algorithmKey": "scatter",
+        "objectiveKey": "sphere",
+        "nests": 80,
+        "pa": 0.25,
+        "maxIter": 120,
+        "alpha": 0.35,
+        "beta": 14
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.009286521688612995,
+          "finalBest": 5.033193359451232e-7,
+          "improvement": 99.99458010918596,
+          "steps": 487,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 19,
+          "initialBest": 0.2056646993661955,
+          "finalBest": 7.21141603184976e-7,
+          "improvement": 99.9996493605342,
+          "steps": 487,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.010530154455274618,
+          "finalBest": 8.611220386971013e-7,
+          "improvement": 99.99182232281251,
+          "steps": 487,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 0.28306290932921474,
+          "finalBest": 9.336819383116149e-7,
+          "improvement": 99.99967015037734,
+          "steps": 163,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 1.9141985492566684,
+          "finalBest": 1.5127961523493154e-8,
+          "improvement": 99.99999920969736,
+          "steps": 649,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 1.5127961523493154e-8,
+        "worstFinal": 9.336819383116149e-7,
+        "medianFinal": 7.21141603184976e-7,
+        "medianImprovement": 99.9996493605342,
+        "avgSteps": 454.6
+      }
+    },
+    {
+      "name": "Scatter / Ackley",
+      "params": {
+        "algorithmKey": "scatter",
+        "objectiveKey": "ackley",
+        "nests": 80,
+        "pa": 0.25,
+        "maxIter": 120,
+        "alpha": 0.35,
+        "beta": 14
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.5038143496657703,
+          "finalBest": 0.0003502983501668666,
+          "improvement": 99.93047074772696,
+          "steps": 1135,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 19,
+          "initialBest": 2.7308469877815753,
+          "finalBest": 0.0009640348193187265,
+          "improvement": 99.96469832166972,
+          "steps": 1135,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.5520461442172611,
+          "finalBest": 0.0009152510466137187,
+          "improvement": 99.83420751033205,
+          "steps": 2431,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 3.233292380579737,
+          "finalBest": 0.0007100494709426641,
+          "improvement": 99.97803942893604,
+          "steps": 6157,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 4.481108242147908,
+          "finalBest": 0.0009203225633633849,
+          "improvement": 99.9794621661957,
+          "steps": 3079,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.0003502983501668666,
+        "worstFinal": 0.0009640348193187265,
+        "medianFinal": 0.0009152510466137187,
+        "medianImprovement": 99.96469832166972,
+        "avgSteps": 2787.4
+      }
+    },
+    {
+      "name": "Scatter / Rastrigin",
+      "params": {
+        "algorithmKey": "scatter",
+        "objectiveKey": "rastrigin",
+        "nests": 80,
+        "pa": 0.25,
+        "maxIter": 120,
+        "alpha": 0.35,
+        "beta": 14
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 1.8023485583893564,
+          "finalBest": 0.0004144484470955945,
+          "improvement": 99.97700508898978,
+          "steps": 163,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 19,
+          "initialBest": 1.25358199780967,
+          "finalBest": 0.0002267823002490843,
+          "improvement": 99.98190925678215,
+          "steps": 487,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 2.0530203122243194,
+          "finalBest": 0.0008953230483736974,
+          "improvement": 99.95638995663889,
+          "steps": 163,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 4.078986274526628,
+          "finalBest": 0.0001565673943701995,
+          "improvement": 99.99616161016898,
+          "steps": 487,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 6.90318436570989,
+          "finalBest": 0.00005025548445125594,
+          "improvement": 99.99927199562131,
+          "steps": 973,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.00005025548445125594,
+        "worstFinal": 0.0008953230483736974,
+        "medianFinal": 0.0002267823002490843,
+        "medianImprovement": 99.98190925678215,
+        "avgSteps": 454.6
+      }
+    }
+  ]
+}
