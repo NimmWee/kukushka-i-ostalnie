@@ -128,6 +128,38 @@ npx serve .
 
 - любой современный браузер с поддержкой JavaScript
 
+## ✅ Проверка алгоритмов
+
+В проект добавлены детерминированные headless-проверки, которые прогоняют именно код из `app.js`, но без браузера.
+
+### Быстрые проверки
+
+```bash
+node scripts/run-algorithm-tests.js
+```
+
+Что проверяется:
+
+- завершение всех алгоритмов
+- монотонность `best-so-far`
+- сохранение точек внутри границ поиска `[-5, 5]`
+- инварианты `GA + Tabu`, `Simulated Annealing`, `Scatter Search`
+- sanity-check сходимости на `Sphere`
+
+### Подробный отчёт
+
+```bash
+node scripts/verify-algorithms.js
+```
+
+Отчёт показывает:
+
+- результат по нескольким `seed`
+- стартовое и финальное значение функции
+- процент улучшения
+- число шагов
+- сравнение для `Sphere`, `Ackley`, `Rastrigin`
+
 ## 🔗 Репозиторий
 
 GitHub: `https://github.com/NimmWee/kukushka-i-ostalnie.git`
