@@ -32,6 +32,15 @@ const scenarios = {
     maxIter: 120,
     alpha: 0.35,
     beta: 14
+  },
+  cuckoo: {
+    algorithmKey: "cuckoo",
+    objectiveKey: "sphere",
+    nests: 50,
+    pa: 0.25,
+    maxIter: 120,
+    alpha: 0.35,
+    beta: 1.5
   }
 };
 
@@ -148,11 +157,42 @@ function checkScatterRefSet() {
   assert.ok(expectedRefSize > 0, "RefSet size should be initialized");
 }
 
+function checkCuckooNestInvariants() {
+  const harness = createHarness({ seed: 601 });
+  harness.configure({
+    ...scenarios.cuckoo,
+    objectiveKey: "ackley"
+  });
+
+  const expectedNestCount = scenarios.cuckoo.nests;
+  let sawAbandonPhase = false;
+
+  const result = harness.runUntilDone({
+    onStep(snapshot) {
+      const algo = snapshot.algorithmState;
+      if (!algo || !Array.isArray(algo.nests)) return;
+
+      assert.equal(algo.nests.length, expectedNestCount, "cuckoo nest count must stay constant");
+      assert.ok(algo.discoveryRate >= 0.05 && algo.discoveryRate <= 0.6, "discovery rate out of bounds");
+      assert.ok(algo.levyLambda >= 1.1 && algo.levyLambda <= 2, "Levy lambda out of bounds");
+
+      if (snapshot.flowPhase === "cs_abandon") {
+        sawAbandonPhase = true;
+        assert.ok(Array.isArray(snapshot.candidates), "abandon phase should expose candidates");
+      }
+    }
+  });
+
+  assert.equal(result.done, true);
+  assert.equal(sawAbandonPhase, true, "cuckoo search should enter abandon phase");
+}
+
 function checkSphereConvergence() {
   const thresholds = {
     ga_tabu: 0.01,
     annealing: 0.01,
-    scatter: 0.03
+    scatter: 0.03,
+    cuckoo: 0.02
   };
 
   for (const [name, params] of Object.entries(scenarios)) {
@@ -175,6 +215,7 @@ function runAllChecks() {
     { name: "GA+Tabu population and seed invariants", fn: checkGaTabuPopulationAndSeeds },
     { name: "annealing cooling invariants", fn: checkAnnealingCooling },
     { name: "scatter RefSet invariants", fn: checkScatterRefSet },
+    { name: "cuckoo nest invariants", fn: checkCuckooNestInvariants },
     { name: "sphere convergence sanity-check", fn: checkSphereConvergence }
   ];
 

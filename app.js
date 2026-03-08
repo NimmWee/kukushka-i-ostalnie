@@ -106,6 +106,16 @@ const algorithmProfiles = {
       alpha: { title: "Сигма мутации", hint: "Для потомков", min: 0.01, max: 2, step: 0.01, default: 0.35 },
       beta: { title: "Шагов лок. улучшения", hint: "Для лучших потомков", min: 2, max: 80, step: 1, default: 14, integer: true }
     }
+  },
+  cuckoo: {
+    hint: "Cuckoo Search: Levy flights, случайная замена и abandon fraction.",
+    fields: {
+      nests: { title: "Число гнезд N", hint: "Размер набора гнезд", min: 15, max: 250, step: 1, default: 50, integer: true },
+      pa: { title: "Вероятность обнаружения p_a", hint: "Доля худших гнезд для замены", min: 0.05, max: 0.6, step: 0.01, default: 0.25 },
+      maxIter: { title: "Максимум итераций", hint: "Лимит основного цикла", min: 20, max: 2000, step: 1, default: 120, integer: true },
+      alpha: { title: "Шаг Levy alpha", hint: "Масштаб Levy-полетов", min: 0.05, max: 1.2, step: 0.01, default: 0.35 },
+      beta: { title: "Параметр Levy lambda", hint: "Показатель тяжелого хвоста", min: 1.1, max: 2, step: 0.05, default: 1.5 }
+    }
   }
 };
 
@@ -137,6 +147,14 @@ const flowDefinitions = {
     { key: "ss_improve", caption: "5) Local improve", title: "Improve", text: "Локальное улучшение" },
     { key: "ss_update_refset", caption: "6) Update RefSet", title: "Update", text: "Обновление RefSet и best" },
     { key: "done", caption: "7) Done", title: "Done", text: "Завершение" }
+  ],
+  cuckoo: [
+    { key: "init", caption: "1) Init nests", title: "Init", text: "Инициализация гнезд и лучшего решения" },
+    { key: "cs_check", caption: "2) Stop check", title: "Stop check", text: "Проверка iter/maxIter и target" },
+    { key: "cs_flight", caption: "3) Levy flight", title: "Levy flight", text: "Генерация нового cuckoo via Levy flight" },
+    { key: "cs_compare", caption: "4) Random nest compare", title: "Compare", text: "Случайное сравнение и замена" },
+    { key: "cs_abandon", caption: "5) Abandon worst nests", title: "Abandon", text: "Замена части худших гнезд" },
+    { key: "done", caption: "6) Done", title: "Done", text: "Завершение" }
   ]
 };
 
@@ -304,6 +322,83 @@ function gaussianRandom() {
   while (u === 0) u = Math.random();
   while (v === 0) v = Math.random();
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+function gammaLanczos(z) {
+  const p = [
+    676.5203681218851,
+    -1259.1392167224028,
+    771.3234287776531,
+    -176.6150291621406,
+    12.507343278686905,
+    -0.13857109526572012,
+    9.984369578019572e-6,
+    1.5056327351493116e-7
+  ];
+
+  if (z < 0.5) return Math.PI / (Math.sin(Math.PI * z) * gammaLanczos(1 - z));
+
+  let x = 0.9999999999998099;
+  const shifted = z - 1;
+  for (let i = 0; i < p.length; i += 1) x += p[i] / (shifted + i + 1);
+  const t = shifted + p.length - 0.5;
+  return Math.sqrt(2 * Math.PI) * Math.pow(t, shifted + 0.5) * Math.exp(-t) * x;
+}
+
+function levyFlightStep(lambda) {
+  const safeLambda = clamp(lambda, 1.1, 2);
+  const numerator = gammaLanczos(1 + safeLambda) * Math.sin((Math.PI * safeLambda) / 2);
+  const denominator = gammaLanczos((1 + safeLambda) / 2) * safeLambda * Math.pow(2, (safeLambda - 1) / 2);
+  const sigma = Math.pow(numerator / Math.max(denominator, 1e-12), 1 / safeLambda);
+  const u = gaussianRandom() * sigma;
+  const v = gaussianRandom();
+  return u / Math.pow(Math.abs(v) + 1e-12, 1 / safeLambda);
+}
+
+function randomIndex(length, except = -1) {
+  if (length <= 1) return 0;
+  let index = Math.floor(Math.random() * length);
+  while (index === except) index = Math.floor(Math.random() * length);
+  return index;
+}
+
+function levyFlightCandidate(current, best, flightScale, levyLambda) {
+  const step = levyFlightStep(levyLambda) * Math.max(0.05, flightScale) * 0.18;
+  const dx = Math.abs(current.x - best.x) > 0.02 ? current.x - best.x : gaussianRandom();
+  const dy = Math.abs(current.y - best.y) > 0.02 ? current.y - best.y : gaussianRandom();
+
+  return evaluatePoint({
+    x: clamp(current.x + step * dx + gaussianRandom() * 0.015, BOUNDS.min, BOUNDS.max),
+    y: clamp(current.y + step * dy + gaussianRandom() * 0.015, BOUNDS.min, BOUNDS.max)
+  });
+}
+
+function abandonWorstNests(nests, discoveryRate, localSigma, best) {
+  const ranked = nests
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => b.item.fitness - a.item.fitness);
+  const next = nests.map((item) => cloneSolution(item));
+  const replacements = [];
+  const replaceCount = clamp(Math.round(discoveryRate * nests.length), 1, Math.max(1, nests.length - 1));
+
+  for (let i = 0; i < replaceCount; i += 1) {
+    const replaceIndex = ranked[i].index;
+    const donorA = next[randomIndex(next.length)];
+    const donorB = next[randomIndex(next.length)];
+    const useRandomRestart = Math.random() < 0.3;
+
+    const candidate = useRandomRestart
+      ? randomSolution()
+      : evaluatePoint({
+          x: clamp(best.x + gaussianRandom() * localSigma + (donorA.x - donorB.x) * rand(-0.45, 0.45), BOUNDS.min, BOUNDS.max),
+          y: clamp(best.y + gaussianRandom() * localSigma + (donorA.y - donorB.y) * rand(-0.45, 0.45), BOUNDS.min, BOUNDS.max)
+        });
+
+    next[replaceIndex] = candidate;
+    replacements.push(cloneSolution(candidate));
+  }
+
+  return { nests: next, replacements };
 }
 
 function mutateCoordinates(point, mutationRate, sigma) {
@@ -912,6 +1007,38 @@ function initScatter() {
   logEntry(`Init Scatter: N=${state.params.nests}, b=${refSize}, sigma=${state.params.alpha}, localSteps=${state.algorithmState.localSteps}.`);
 }
 
+function initCuckoo() {
+  const nests = [];
+  for (let i = 0; i < state.params.nests; i += 1) nests.push(randomSolution());
+
+  const best = getBest(nests);
+
+  state.algorithmState = {
+    nests,
+    iter: 0,
+    currentIndex: 0,
+    targetIndex: 0,
+    candidate: null,
+    discoveryRate: state.params.pa,
+    flightScale: Math.max(0.05, state.params.alpha),
+    levyLambda: clamp(state.params.beta, 1.1, 2),
+    localSigma: Math.max(0.04, state.params.alpha * 0.65)
+  };
+
+  state.points = nests.map((item) => cloneSolution(item));
+  state.candidates = [];
+  state.best = cloneSolution(best);
+  state.iter = 0;
+  state.progressMax = state.params.maxIter;
+  state.history = [state.best.fitness];
+  state.initialBestFitness = state.best.fitness;
+  state.machinePhase = "cs_check";
+  setPhase("init");
+
+  setStatus(`Cuckoo init: N=${state.params.nests}, p_a=${state.params.pa}, alpha=${state.params.alpha}, lambda=${formatNum(state.algorithmState.levyLambda, 2)}.`);
+  logEntry(`Init Cuckoo: N=${state.params.nests}, p_a=${state.params.pa}, alpha=${state.params.alpha}, lambda=${formatNum(state.algorithmState.levyLambda, 2)}.`);
+}
+
 function stepGaTabu() {
   const algo = state.algorithmState;
 
@@ -1226,6 +1353,83 @@ function stepScatter() {
   return false;
 }
 
+function stepCuckoo() {
+  const algo = state.algorithmState;
+  const objectiveTarget = objectives[state.params.objectiveKey].target;
+
+  switch (state.machinePhase) {
+    case "cs_check": {
+      setPhase("cs_check");
+      if (algo.iter >= state.params.maxIter) {
+        finishSimulation(`достигнут лимит iter=${state.params.maxIter}`);
+        return true;
+      }
+      if (state.best.fitness <= objectiveTarget) {
+        finishSimulation("достигнута целевая точность");
+        return true;
+      }
+
+      algo.currentIndex = randomIndex(algo.nests.length);
+      algo.targetIndex = randomIndex(algo.nests.length, algo.currentIndex);
+      state.candidates = [];
+      state.points = algo.nests.map((item) => cloneSolution(item));
+      setStatus(`Cuckoo iter ${algo.iter + 1}: flight from nest ${algo.currentIndex + 1}.`);
+      state.machinePhase = "cs_flight";
+      break;
+    }
+    case "cs_flight": {
+      setPhase("cs_flight");
+      const source = algo.nests[algo.currentIndex];
+      algo.candidate = levyFlightCandidate(source, state.best, algo.flightScale, algo.levyLambda);
+      state.points = algo.nests.map((item) => cloneSolution(item));
+      state.candidates = [cloneSolution(algo.candidate)];
+      state.machinePhase = "cs_compare";
+      break;
+    }
+    case "cs_compare": {
+      setPhase("cs_compare");
+      const target = algo.nests[algo.targetIndex];
+      if (algo.candidate.fitness < target.fitness - EPS) {
+        algo.nests[algo.targetIndex] = cloneSolution(algo.candidate);
+      }
+
+      const bestNest = getBest(algo.nests);
+      if (bestNest.fitness < state.best.fitness - EPS) state.best = cloneSolution(bestNest);
+
+      state.points = algo.nests.map((item) => cloneSolution(item));
+      state.candidates = [cloneSolution(algo.candidate)];
+      setStatus(`Cuckoo compare: nest ${algo.targetIndex + 1} ${algo.candidate.fitness < target.fitness - EPS ? "updated" : "kept"}.`);
+      state.machinePhase = "cs_abandon";
+      break;
+    }
+    case "cs_abandon": {
+      setPhase("cs_abandon");
+      const replaced = abandonWorstNests(algo.nests, algo.discoveryRate, algo.localSigma, state.best);
+      algo.nests = replaced.nests;
+      algo.iter += 1;
+
+      const bestNest = getBest(algo.nests);
+      if (bestNest.fitness < state.best.fitness - EPS) state.best = cloneSolution(bestNest);
+
+      state.iter = algo.iter;
+      state.points = algo.nests.map((item) => cloneSolution(item));
+      state.candidates = replaced.replacements.map((item) => cloneSolution(item));
+      state.history.push(state.best.fitness);
+      setStatus(`Cuckoo iter ${algo.iter}: replaced ${replaced.replacements.length} nests.`);
+      if (algo.iter % 10 === 0 || replaced.replacements.length) {
+        logEntry(`[Cuckoo iter ${algo.iter}] best=${formatNum(state.best.fitness, 7)}, replaced=${replaced.replacements.length}.`);
+      }
+      state.machinePhase = "cs_check";
+      break;
+    }
+    default:
+      state.machinePhase = "cs_check";
+      break;
+  }
+
+  return false;
+}
+
 function stepMachine() {
   if (!state.params) return;
 
@@ -1233,6 +1437,7 @@ function stepMachine() {
   if (state.params.algorithmKey === "ga_tabu") finished = stepGaTabu();
   else if (state.params.algorithmKey === "annealing") finished = stepAnnealing();
   else if (state.params.algorithmKey === "scatter") finished = stepScatter();
+  else if (state.params.algorithmKey === "cuckoo") finished = stepCuckoo();
 
   if (!finished) refreshAll();
 }
@@ -1281,6 +1486,7 @@ function resetSimulation() {
   if (state.params.algorithmKey === "ga_tabu") initGaTabu();
   else if (state.params.algorithmKey === "annealing") initAnnealing();
   else if (state.params.algorithmKey === "scatter") initScatter();
+  else if (state.params.algorithmKey === "cuckoo") initCuckoo();
 
   rebuildFieldImage();
   setStopReason("пока не завершено");

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Metaheuristics Lab - GA + Tabu, Annealing, Scatter Search</title>
+  <title>Metaheuristics Lab - GA + Tabu, Annealing, Scatter Search, Cuckoo Search</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,8 +13,8 @@
     <div class="hero-text">
       <h1>Гибридные и популяционные методы оптимизации</h1>
       <p>
-        Реализация по блок-схемам: <strong>Genetic + Tabu</strong>, <strong>Simulated Annealing</strong> и
-        <strong>Scatter Search</strong> на одной карте целевой функции.
+        Реализация по блок-схемам: <strong>Genetic + Tabu</strong>, <strong>Simulated Annealing</strong>,
+        <strong>Scatter Search</strong> и <strong>Cuckoo Search</strong> на одной карте целевой функции.
       </p>
       <div class="hero-note">
         <strong>Идея:</strong> для режима <span>GA + Tabu</span> генетический алгоритм сначала выделяет
@@ -22,9 +22,10 @@
       </div>
     </div>
     <div class="hero-links">
-      <a class="source-link" href="../genetik/genetik.jpg" target="_blank" rel="noopener">Схема Genetik</a>
-      <a class="source-link" href="../otshig/otshig.jpg" target="_blank" rel="noopener">Схема Otshig</a>
-      <a class="source-link" href="../rasseivanie/rasseivanie.jpg" target="_blank" rel="noopener">Схема Rasseivanie</a>
+      <a class="source-link" href="./genetik.jpg" target="_blank" rel="noopener">Схема Genetik</a>
+      <a class="source-link" href="./otshig.jpg" target="_blank" rel="noopener">Схема Otshig</a>
+      <a class="source-link" href="./rasseivanie.jpg" target="_blank" rel="noopener">Схема Rasseivanie</a>
+      <a class="source-link" href="./kukushka.jpg" target="_blank" rel="noopener">Схема Kukushka</a>
     </div>
   </header>
 
@@ -56,6 +57,7 @@
             <option value="ga_tabu">GA + Tabu (по схеме genetik)</option>
             <option value="annealing">Simulated Annealing (otshig)</option>
             <option value="scatter">Scatter Search (rasseivanie)</option>
+            <option value="cuckoo">Cuckoo Search (kukushka)</option>
           </select>
           <small id="algorithmHint">Выберите метод, затем нажмите "Сброс" для инициализации.</small>
         </label>

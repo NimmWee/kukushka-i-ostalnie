@@ -18,7 +18,7 @@
 
 </div>
 
-> Проект показывает, как работают `GA + Tabu`, `Simulated Annealing` и `Scatter Search` на одной карте целевой функции — с анимацией, графиком сходимости, пошаговым режимом и журналом выполнения.
+> Проект показывает, как работают `GA + Tabu`, `Simulated Annealing`, `Scatter Search` и `Cuckoo Search` на одной карте целевой функции — с анимацией, графиком сходимости, пошаговым режимом и журналом выполнения.
 
 ---
 
@@ -68,6 +68,7 @@ npx serve .
    - `GA + Tabu`
    - `Simulated Annealing`
    - `Scatter Search`
+   - `Cuckoo Search`
 2. Выберите целевую функцию:
    - `Sphere`
    - `Rastrigin`
@@ -83,22 +84,28 @@ npx serve .
 
 <table>
   <tr>
-    <td align="center" width="33%">
+    <td align="center" width="25%">
       <strong>GA + Tabu</strong><br />
       <a href="./genetik.jpg">
         <img src="./genetik.jpg" alt="GA + Tabu" width="100%" />
       </a>
     </td>
-    <td align="center" width="33%">
+    <td align="center" width="25%">
       <strong>Simulated Annealing</strong><br />
       <a href="./otshig.jpg">
         <img src="./otshig.jpg" alt="Simulated Annealing" width="100%" />
       </a>
     </td>
-    <td align="center" width="33%">
+    <td align="center" width="25%">
       <strong>Scatter Search</strong><br />
       <a href="./rasseivanie.jpg">
         <img src="./rasseivanie.jpg" alt="Scatter Search" width="100%" />
+      </a>
+    </td>
+    <td align="center" width="25%">
+      <strong>Cuckoo Search</strong><br />
+      <a href="./kukushka.jpg">
+        <img src="./kukushka.jpg" alt="Cuckoo Search" width="100%" />
       </a>
     </td>
   </tr>
@@ -114,7 +121,7 @@ npx serve .
 ├── genetik.jpg       # схема Genetic + Tabu
 ├── otshig.jpg        # схема Simulated Annealing
 ├── rasseivanie.jpg   # схема Scatter Search
-└── kukushka.jpg      # дополнительное изображение проекта
+└── kukushka.jpg      # схема Cuckoo Search
 ```
 
 ## 💡 Почему проект удобен для демонстрации
@@ -143,7 +150,7 @@ node scripts/run-algorithm-tests.js
 - завершение всех алгоритмов
 - монотонность `best-so-far`
 - сохранение точек внутри границ поиска `[-5, 5]`
-- инварианты `GA + Tabu`, `Simulated Annealing`, `Scatter Search`
+- инварианты `GA + Tabu`, `Simulated Annealing`, `Scatter Search`, `Cuckoo Search`
 - sanity-check сходимости на `Sphere`
 
 ### Наглядная сводка по алгоритмам
@@ -155,6 +162,7 @@ node scripts/run-algorithm-tests.js
 | `GA + Tabu` | ✅ пройдены | `1.588e-7` | `4.580e-4` | `5.598e-4` | Очень сильный и стабильный |
 | `Simulated Annealing` | ✅ пройдены | `0.001724` | `0.162728` | `1.033124` | Работает, но заметно слабее |
 | `Scatter Search` | ✅ пройдены | `7.211e-7` | `9.153e-4` | `2.268e-4` | Очень сильный и стабильный |
+| `Cuckoo Search` | ✅ пройдены | `1.431e-5` | `0.027411` | `0.009087` | Сильный на `Sphere/Ackley`, слабее на `Rastrigin` |
 
 Как читать таблицу:
 
@@ -164,8 +172,9 @@ node scripts/run-algorithm-tests.js
 
 Короткий вывод:
 
-- `GA + Tabu` и `Scatter Search` проходят проверки уверенно и показывают сильную сходимость
-- `Simulated Annealing` тоже проходит проверки, но на сложных функциях ведёт себя слабее и менее стабильно
+- `GA + Tabu` и `Scatter Search` проходят проверки увереннее всех и показывают сильную сходимость
+- `Cuckoo Search` тоже проходит проверки и выглядит убедительно, особенно на `Sphere` и `Ackley`
+- `Simulated Annealing` проходит проверки, но на сложных функциях ведёт себя слабее и менее стабильно
 
 ### Подробный отчёт
 

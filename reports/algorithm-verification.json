@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-08T17:18:05.873Z",
+  "generatedAt": "2026-03-08T17:47:19.138Z",
   "notes": [
     "Tests use the real browser implementation from app.js via a headless DOM/canvas harness.",
     "Results are deterministic because each run uses a fixed random seed.",
@@ -625,6 +625,213 @@
         "medianFinal": 0.0002267823002490843,
         "medianImprovement": 99.98190925678215,
         "avgSteps": 454.6
+      }
+    },
+    {
+      "name": "Cuckoo Search / Sphere",
+      "params": {
+        "algorithmKey": "cuckoo",
+        "objectiveKey": "sphere",
+        "nests": 50,
+        "pa": 0.25,
+        "maxIter": 120,
+        "alpha": 0.35,
+        "beta": 1.5
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.009286521688612995,
+          "finalBest": 0.000012080990598931077,
+          "improvement": 99.86990833593008,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 19,
+          "initialBest": 0.2056646993661955,
+          "finalBest": 0.0001383944495980322,
+          "improvement": 99.93270870011989,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.010530154455274618,
+          "finalBest": 0.000014308763280104138,
+          "improvement": 99.86411630198894,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 29,
+          "initialBest": 0.28306290932921474,
+          "finalBest": 8.275219576914916e-8,
+          "improvement": 99.99997076544011,
+          "steps": 305,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 31,
+          "initialBest": 1.9141985492566684,
+          "finalBest": 0.00004949708674104592,
+          "improvement": 99.99741421354852,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 8.275219576914916e-8,
+        "worstFinal": 0.0001383944495980322,
+        "medianFinal": 0.000014308763280104138,
+        "medianImprovement": 99.93270870011989,
+        "avgSteps": 445.8
+      }
+    },
+    {
+      "name": "Cuckoo Search / Ackley",
+      "params": {
+        "algorithmKey": "cuckoo",
+        "objectiveKey": "ackley",
+        "nests": 50,
+        "pa": 0.25,
+        "maxIter": 120,
+        "alpha": 0.35,
+        "beta": 1.5
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 0.5038143496657703,
+          "finalBest": 0.02741133123759809,
+          "improvement": 94.55923967711863,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 19,
+          "initialBest": 2.9699512478627597,
+          "finalBest": 0.016669729157761992,
+          "improvement": 99.43872044466191,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 23,
+          "initialBest": 0.5520461442172611,
+          "finalBest": 0.0399135781860771,
+          "improvement": 92.76988371277005,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 29,
+          "initialBest": 3.557446215896359,
+          "finalBest": 0.04105762979318328,
+          "improvement": 98.8458678697736,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 31,
+          "initialBest": 4.481108242147908,
+          "finalBest": 0.014055870299497286,
+          "improvement": 99.68633048924612,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.014055870299497286,
+        "worstFinal": 0.04105762979318328,
+        "medianFinal": 0.02741133123759809,
+        "medianImprovement": 98.8458678697736,
+        "avgSteps": 481
+      }
+    },
+    {
+      "name": "Cuckoo Search / Rastrigin",
+      "params": {
+        "algorithmKey": "cuckoo",
+        "objectiveKey": "rastrigin",
+        "nests": 50,
+        "pa": 0.25,
+        "maxIter": 120,
+        "alpha": 0.35,
+        "beta": 1.5
+      },
+      "seeds": [
+        11,
+        19,
+        23,
+        29,
+        31
+      ],
+      "runs": [
+        {
+          "seed": 11,
+          "initialBest": 1.8023485583893564,
+          "finalBest": 0.009087116528016637,
+          "improvement": 99.49581802666754,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 19,
+          "initialBest": 3.9860946255424548,
+          "finalBest": 0.0009692074945064633,
+          "improvement": 99.97568528633776,
+          "steps": 145,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 23,
+          "initialBest": 2.0530203122243194,
+          "finalBest": 0.00087091087608826,
+          "improvement": 99.95757904240389,
+          "steps": 213,
+          "stopReason": "Причина остановки: достигнута целевая точность"
+        },
+        {
+          "seed": 29,
+          "initialBest": 4.078986274526628,
+          "finalBest": 0.9982432191616457,
+          "improvement": 75.52717386190535,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        },
+        {
+          "seed": 31,
+          "initialBest": 6.90318436570989,
+          "finalBest": 1.9979412165403243,
+          "improvement": 71.05768713834915,
+          "steps": 481,
+          "stopReason": "Причина остановки: достигнут лимит iter=120"
+        }
+      ],
+      "summary": {
+        "finished": true,
+        "bestFinal": 0.00087091087608826,
+        "worstFinal": 1.9979412165403243,
+        "medianFinal": 0.009087116528016637,
+        "medianImprovement": 99.49581802666754,
+        "avgSteps": 360.2
       }
     }
   ]

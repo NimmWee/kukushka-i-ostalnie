@@ -48,6 +48,21 @@ const scenarios = [
     name: "Scatter / Rastrigin",
     params: { algorithmKey: "scatter", objectiveKey: "rastrigin", nests: 80, pa: 0.25, maxIter: 120, alpha: 0.35, beta: 14 },
     seeds: [11, 19, 23, 29, 31]
+  },
+  {
+    name: "Cuckoo Search / Sphere",
+    params: { algorithmKey: "cuckoo", objectiveKey: "sphere", nests: 50, pa: 0.25, maxIter: 120, alpha: 0.35, beta: 1.5 },
+    seeds: [11, 19, 23, 29, 31]
+  },
+  {
+    name: "Cuckoo Search / Ackley",
+    params: { algorithmKey: "cuckoo", objectiveKey: "ackley", nests: 50, pa: 0.25, maxIter: 120, alpha: 0.35, beta: 1.5 },
+    seeds: [11, 19, 23, 29, 31]
+  },
+  {
+    name: "Cuckoo Search / Rastrigin",
+    params: { algorithmKey: "cuckoo", objectiveKey: "rastrigin", nests: 50, pa: 0.25, maxIter: 120, alpha: 0.35, beta: 1.5 },
+    seeds: [11, 19, 23, 29, 31]
   }
 ];
 
