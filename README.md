@@ -201,3 +201,28 @@ node scripts/verify-algorithms.js --json reports/algorithm-verification.json --c
 ## 🔗 Репозиторий
 
 GitHub: `https://github.com/NimmWee/kukushka-i-ostalnie.git`
+
+## Berlin52 benchmark
+
+Below is the compact Berlin52 table shown directly in the README.
+Known optimum: `7542`, seeds: `11, 19, 23, 29, 31`.
+
+| Algorithm | Exact hits | <=1% gap | <=5% gap | Median final | Median gap |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `GA+Tabu` | `5/5` | `5/5` | `5/5` | `7542` | `0.000%` |
+| `Simulated Annealing` | `0/5` | `1/5` | `5/5` | `7733` | `2.532%` |
+| `Scatter Search` | `5/5` | `5/5` | `5/5` | `7542` | `0.000%` |
+| `Cuckoo Search` | `5/5` | `5/5` | `5/5` | `7542` | `0.000%` |
+
+| Algorithm | Start | 25% | 50% | 75% | Final |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `GA+Tabu` | `8164` | `7734` | `7542` | `7542` | `7542` |
+| `Simulated Annealing` | `8164` | `8164` | `7922` | `7769` | `7733` |
+| `Scatter Search` | `8421` | `7542` | `7542` | `7542` | `7542` |
+| `Cuckoo Search` | `8421` | `7542` | `7542` | `7542` | `7542` |
+
+Full details:
+- `BERLIN52_VISUAL_TABLE.md`
+- `BERLIN52_CONVERGENCE_SUMMARY.md`
+- `reports/berlin52-convergence.json`
+- `reports/berlin52-convergence.csv`
