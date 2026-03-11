@@ -6,6 +6,8 @@ Seeds: `11, 19, 23, 29, 31`
 
 Benchmark: `Berlin52`, `EUC_2D`, optimum `7542`.
 
+Visual table: `BERLIN52_VISUAL_TABLE.md`.
+
 ## Final quality
 
 | Algorithm | Best final | Median final | Worst final | Median gap | <=5% gap hits | <=1% gap hits | Exact hits |
